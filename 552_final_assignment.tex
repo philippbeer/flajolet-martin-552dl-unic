@@ -1,0 +1,119 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=2.5cm, left=2cm]{geometry}
+\usepackage{graphicx}
+	
+%\usepackage{fontspec}
+%\setmainfont{Times New Roman}
+
+\usepackage{setspace}
+\onehalfspacing 
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\usepackage{bbold}
+\usepackage[utf8]{inputenc}
+\usepackage{luatex85}
+\usepackage[english]{babel}
+
+\usepackage{url}
+
+
+\newtheorem{definizione}{Definizione}
+\newtheorem{proposizione}{Proposizione}
+\newtheorem{lemma}{Lemma}
+\newtheorem{teorema}{Teorema}
+
+
+\DeclareMathOperator{\EX}{\mathbb{E}}
+\DeclareMathOperator{\Id}{\mathbb{1}}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\tr}{Tr}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\title{Flajolet Martin}
+\begin{document}
+%\titlepage
+%\clearpage\null\newpage
+%\tableofcontents
+%\pagebreak
+\clearpage\null\newpage
+\section{Introduction}
+The goal of this assignment is to implement the Flajolet-Martin algorithm to estimate the cardinalities of multisets of words for a variety of entries in the online encyclopedia Wikipedia. Specifically count the number of unique words in a wikipedia page.
+
+\subsection{Motivation}
+Counting unique elements is one of the fundamental activities in most computer applications. In their original paper \cite{bib:fm85} mentioned computational constraints as a reason to search for alternative ways of achieving a reasonably accurate estimate of cardinalities of multisets. Aside from this, today additional use cases have arisen, that make the utilization of the below introduced of \emph{Flajolet-Martin algorithm} interesting. As will shown the algorithm is capable of handling stream data while estimating the cardinalities of the transmitted dataset in a single pass.
+
+
+\section{Resources}
+\subsection{Programming Language}
+For the implementation Python is chosen as programming language. Aside from its ubiquity it also offers a number of packages that can be utilized for the realization of this task. In particular the wikpedia package \cite{bib:goldsmith} can be used to read arbitrary wikipedia articles as it layed out in~\ref{subsec:data}. 
+
+\subsection{Data set}
+\label{subsec:data}
+The resources for which unique items are to be counted are the unique words occcuring in \emph{Wikipedia} entries. Numerous options for processing accessing this data are available that fall into these main categories:
+\begin{itemize}
+  \item Scraping the website and processing the read html pages for their content
+\item Downloading Wikipedia as a database as described in \cite{bib:wikidl}
+  \item Utilizing a package that encapsulates the aforementioned activities and provides the data to the user
+\end{itemize}
+
+Downloading \emph{Wikipedia} as database is possible but requires large storage space (~11GB) and for the most part will not be used. The second option is also a larger challenge as it requires signficant preprocessing steps before the actual activities in the assignment can be carried out. Therefore the third option of a package that provides the page content as a data object appears to be the most straight forward approach. Additional pre-processing steps were applied to the page content. The data was:
+\begin{itemize}
+\item modified to lowercase only
+\item exchange all non-word characters with whitespace character
+\item exchange all digits with whitespace character
+\item replace multi-whitespace characters with a single whitespace
+\end{itemize}
+To get an accurate word count the above steps appear to be sensible to avoid words that can be considered unique and may only be different because of that fact that they appear at the beginning of a sentence or not. Digits in this work are not considered words and hence replaced. Removing the whitespace characters ensures a clean dataset so that situations where elements are exchanged with whitespace are not counted multiple times.
+
+In order to have access to arbitrary Wikipedia entries a readily available python package \emph{Wikipedia} is utilized and implemented as class that reads and digests wikipedia pages based on the search term provided by the class user.
+
+
+\section{General Solution Approach}
+\subsection{Data Ingestion}
+In order to get be able to count the number of unique words in a \emph{Wikipedia} entry the \emph{WikiText} class is instanciated and provided a search term for which an entry is queried by the wikipedia-Python package and if found returns an object with the respective page content. In case a search term is provided that can not found or retrieved a \emph{PageError} is returned to the use.
+
+Subsequently, the pre-processing activities are carried out and the data object is ready for analysis.
+
+\subsection{Algorithm Execution}
+After the data from the \emph{Wikipedia} page has been ingested and pre-processed a second class (\emph{FlajoletMartin}) is utilized on order to execute the counting of the number of the unique words within that article. The data stream is transferred from the wikipedia page content provided to the newly created object.
+
+The implementation is of this class is described in~ref{sec:class}
+
+\subsection{Verification}
+In order to validate the veracity of the Flajolet-Martin algorithm implementation a second method for counting the unique number of words is implemented inside the \emph{WikiText} class. It is based on the "classical" approach of creating a Python set after the page content has been pre-processed and providing the length of the remaining set. Hence, this approach relies soly on Python "on-board" functionality and is used for the verification of the Flajolet-Martin implementation.
+
+
+\section{Flajolet-Martin Algorithm}
+\subsection{Introduction}
+The \emph{Flajolet-Martin algorithm} builds on probabilities encountered in the use of hashing functions can provide reasonably accurate estimates of cardinalities in large datasets. It is built on the assumption that the records to be estimated can be hashed in a fitting pseudo-random manner.
+
+\subsection{Basic Estimation Approach}
+The following elements are required for the estimation process:
+
+
+\section{Flajolet-Martin Class}
+\label{sec:class}
+
+\pagebreak
+\clearpage\null\newpage
+\begin{thebibliography}{widest entry}
+\bibitem[FM85]{bib:fm85} Flajolet M. and Martin G. N., ``Probabalistic Counting for Data Base Applications'', \emph{Journal of Compyter and System Sciences}, 1985
+\bibitem[Py_Wiki]{bib:goldsmith} Goldsmith, J. ``Wikipedia'', howpublished={\url{https://github.com/goldsmith/Wikipedia}}
+\bibitem[WikiDB] {bib:wikidl} Wikimedia Downloads \emph{https://dumps.wikimedia.org}, Wikimedia! The Wikimedia Foundation, Inc., 2021
+\bibitem[B]{bib:bottacin} Bottacin, F. ``Algebra lineare e geometria'', \emph{Societ\`a Editrice Esculapio}, 2009
+ \bibitem[CCF]{bib:fiorot} Cantarini, N., Chiarellotto, B. e Fiorot, L. ``Un corso di matematica', \emph{Edizioni libreria progetto Padova}, 2005
+ \bibitem[G]{bib:golan} Golan, J. S. ``The Linear Algebra a Beginning Graduate Student Ought to Know'', \emph{Springer}, 2007
+ \bibitem[SSBD]{bib:ssmm} Shalev-Shwartz, S. e Ben-David, S. ``Understanding Machine Learning'', \emph{Cambridge University Press}, 2014
+ \bibitem[MLB]{bib:maclane} Mac Lane, S. and Birkhoff, G. ``Algebra'', \emph{Mursia editore}, 1978 
+ \bibitem[WAlpha]{bib:walfa} Wolfram|Alpha \emph{www.wolframalpha.com}, Wolframalpha LLC, 2020
+ \bibitem[Sklearn]{bib:sklearn} Pedregosa et al., ``Scikit-learn: Machine Learning in Python'', \emph{Journal of Machine Learning Research}, pp. 2825-2830, 2011
+\end{thebibliography}
+
+\end{document}
