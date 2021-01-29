@@ -1,6 +1,5 @@
-% Created 2021-01-28 Thu 00:43
-% Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
+
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
@@ -16,23 +15,9 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{minted}
-\author{Philipp Beer}
-\date{\today}
-\title{}
-\hypersetup{
- pdfauthor={Philipp Beer},
- pdftitle={},
- pdfkeywords={},
- pdfsubject={},
- pdfcreator={Emacs 27.1 (Org mode 9.4)}, 
- pdflang={English}}
-\begin{document}
 
-\tableofcontents
 
-\documentclass[12pt]{article}
-
-\usepackage[top=2.5cm, left=2cm]{geometry}
+\usepackage[top=2cm, left=1cm]{geometry}
 \usepackage{graphicx}
 
 \%\usepackage{fontspec}
@@ -59,32 +44,6 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codepurple},
-    basicstyle=\ttfamily\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2
-}
-
-\lstset{style=mystyle}
-
 
 \newtheorem{definizione}{Definizione}
 \newtheorem{proposizione}{Proposizione}
@@ -106,7 +65,8 @@
 \subtitle{Counting Cardinalities in Wikipedia Entries}
 
 \begin{document}
-
+\maketitle
+\tableofcontents
 \clearpage\null\newpage
 \section{Introduction}
 The goal of this assignment is to implement the Flajolet-Martin algorithm to estimate the cardinalities of multisets of words for a variety of entries in the online encyclopedia Wikipedia. Specifically count the number of unique words in a wikipedia page.
@@ -262,28 +222,24 @@ List of association football families & 5883 \\
  \end{center}
 
 \subsection{Results}
-For each search term the two estimation algorithms were run 1.000 teams each to retrieve a sufficient sample to analyze the behavior of each estimation method.
+For each search term the two estimation algorithms were run 1.000 teams each to retrieve a sufficient sample to analyze the behavior of each estimation \begin{center}
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.99\textwidth]{distribution_small}
-    \caption{Low Count - Distribution of Estimations}
-    \label{fig:dist_small}
-\end{figure}
+\begin{minipage}{1.2\linewidth}
+\includegraphics[width=\linewidth]{images/distribution_small.png}
+\captionof{figure}{Low Count - Distribution of Estimations}
+\end{minipage}%
+\hfill
+\begin{minipage}{1.2\linewidth}
+\includegraphics[width=\linewidth]{images/distribution_med.png}
+\captionof{figure}{Medium Count - Distribuion of Estimations}
+\end{minipage}
+\hfill
+\begin{minipage}{1.2\linewidth}
+\includegraphics[width=\linewidth]{images/distribution_large.png}
+\captionof{figure}{Medium Count - Distribuion of Estimations}
+\end{minipage}
+\end{center}method.
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.99\textwidth]{distribution_med}
-    \caption{Medium Count - Distribution of Estimations}
-    \label{fig:dist_small}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.99\textwidth]{distribution_large}
-    \caption{High Count - Distribution of Estimations}
-    \label{fig:dist_small}
-\end{figure}
 
 
 
@@ -307,6 +263,34 @@ The area of improvement appears to be proper choice of the hash function which d
 \section{Code}
 \label{sec:class}
 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+
 \subsection{Flajolet-Martin and Wikipedia Processing }
 The implementation of both classes as well as the test run described above is as follows:
 \lstinputlisting[language=Python, caption=\emph{Flajolet-Martin} Implementation]{final_assignment.py}
@@ -323,4 +307,6 @@ The visualization were done with slight variation of the following code:
 \bibitem[Py_Wiki]{bib:goldsmith} Goldsmith, J. ``Wikipedia'', \url{https://github.com/goldsmith/Wikipedia}
 \bibitem[WikiDB] {bib:wikidl} Wikimedia Downloads \emph{https://dumps.wikimedia.org}, Wikimedia! The Wikimedia Foundation, Inc., 2021
 \end{thebibliography}
+
 \end{document}
+
