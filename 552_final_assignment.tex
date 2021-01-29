@@ -100,12 +100,13 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
 
-\title{Flajolet Martin}
+\usepackage{blindtext}
+\title{Implemenation of Flajolet-Martin Algorithm}
+\author{Philipp Beer}
+\subtitle{Counting Cardinalities in Wikipedia Entries}
+
 \begin{document}
-%\titlepage
-%\clearpage\null\newpage
-%\tableofcontents
-%\pagebreak
+
 \clearpage\null\newpage
 \section{Introduction}
 The goal of this assignment is to implement the Flajolet-Martin algorithm to estimate the cardinalities of multisets of words for a variety of entries in the online encyclopedia Wikipedia. Specifically count the number of unique words in a wikipedia page.
@@ -308,9 +309,8 @@ The area of improvement appears to be proper choice of the hash function which d
 
 \subsection{Flajolet-Martin and Wikipedia Processing }
 The implementation of both classes as well as the test run described above is as follows:
-\begin{center}
 \lstinputlisting[language=Python, caption=\emph{Flajolet-Martin} Implementation]{final_assignment.py}
-\end{center}
+
 
 \subsection{Visualization Code}
 The visualization were done with slight variation of the following code:
