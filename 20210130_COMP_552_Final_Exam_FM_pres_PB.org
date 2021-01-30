@@ -29,7 +29,7 @@
 #+end_export
 
 * Flajolet-Martin Implemenation
-[[file:images/unic_logo.png]]
+[[https://552dlimages.s3-eu-west-1.amazonaws.com/unic_logo.png]]
 
 Philipp Beer
 ** Counting cardinalities of Wikipedia entries
@@ -205,13 +205,13 @@ def fm(self) -> int:
 
 *** Low Count Entries
 #+attr_html: :width 800px
-[[file:images/distribution_small.png]]
+[[https://552dlimages.s3-eu-west-1.amazonaws.com/distribution_small.png]]
 *** Medium Count Entries
 #+attr_html: :width 800px
-[[file:images/distribution_med.png]]
+[[https://552dlimages.s3-eu-west-1.amazonaws.com/distribution_med.png]]
 *** Large Count Entries
 #+attr_html: :width 800px
-[[file:images/distribution_large.png]]
+[[https://552dlimages.s3-eu-west-1.amazonaws.com/distribution_large.png]]
 ** Discussion
 #+ATTR_REVEAL: :frag (appear)
 - basic estimation is consistent and provides better accuracy compared to PCSA implementation

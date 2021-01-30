@@ -40,11 +40,11 @@
 </style>
 
 <section>
-<section id="slide-orgc3dfd47">
-<h2 id="orgc3dfd47">Flajolet-Martin Implemenation</h2>
+<section id="slide-org1f96ae5">
+<h2 id="org1f96ae5">Flajolet-Martin Implemenation</h2>
 
-<div id="orgeefa40e" class="figure">
-<p><img src="images/unic_logo.png" alt="unic_logo.png" />
+<div id="org4f1853e" class="figure">
+<p><img src="https://552dlimages.s3-eu-west-1.amazonaws.com/unic_logo.png" alt="unic_logo.png" />
 </p>
 </div>
 
@@ -54,8 +54,8 @@ Philipp Beer
 </section>
 </section>
 <section>
-<section id="slide-orgdd995e1">
-<h3 id="orgdd995e1">Counting cardinalities of Wikipedia entries</h3>
+<section id="slide-org3d97f53">
+<h3 id="org3d97f53">Counting cardinalities of Wikipedia entries</h3>
 <p>
 University of Nicosia
 </p>
@@ -70,8 +70,8 @@ Prof. Dr. Thomas Liebig
 </section>
 </section>
 <section>
-<section id="slide-org60001ba">
-<h2 id="org60001ba">Motivation</h2>
+<section id="slide-orgfad37f4">
+<h2 id="orgfad37f4">Motivation</h2>
 <ul>
 <li>counting cardinalities with limited resources (Big Data)</li>
 <li>flow monitoring from stationary sensors</li>
@@ -80,8 +80,8 @@ Prof. Dr. Thomas Liebig
 </section>
 </section>
 <section>
-<section id="slide-org82f85ae">
-<h3 id="org82f85ae">Wikipedia Entry Cardinalities</h3>
+<section id="slide-org7339971">
+<h3 id="org7339971">Wikipedia Entry Cardinalities</h3>
 <ul>
 <li>Wikipedia large variety of cardinalities across its entries</li>
 <li>readily available API for data ingestion</li>
@@ -91,20 +91,20 @@ Prof. Dr. Thomas Liebig
 </section>
 </section>
 <section>
-<section id="slide-org84dcb82">
-<h2 id="org84dcb82">Flajolet-Martin Algorithm</h2>
-<div class="outline-text-2" id="text-org84dcb82">
+<section id="slide-orgeef5f06">
+<h2 id="orgeef5f06">Flajolet-Martin Algorithm</h2>
+<div class="outline-text-2" id="text-orgeef5f06">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org71858e6">
-<h3 id="org71858e6">Basic Estimation Approach</h3>
-<div class="outline-text-3" id="text-org71858e6">
+<section id="slide-org5953da5">
+<h3 id="org5953da5">Basic Estimation Approach</h3>
+<div class="outline-text-3" id="text-org5953da5">
 </div>
 </section>
-<section id="slide-org4080f19">
-<h4 id="org4080f19">Hash Function</h4>
+<section id="slide-orgd37f2de">
+<h4 id="orgd37f2de">Hash Function</h4>
 <p>
 word is denoted as:
 \[ x = (x_0, x_1, \dots, x_p) \]
@@ -115,8 +115,8 @@ Elements of x are hashed via:
 \[ hash(x) = (M + N \sum\limits_{j = 0}^p ord(x_j) 128^j)\: mod \: 2^L \]
 </p>
 </section>
-<section id="slide-org94e4af0">
-<h4 id="org94e4af0">Resulting Integer</h4>
+<section id="slide-org0c37358">
+<h4 id="org0c37358">Resulting Integer</h4>
 <p>
 is considered in its bit form:
 \[  y = \sum_{k \ge 0} bit(y, k)\,2^k \]
@@ -126,8 +126,8 @@ is considered in its bit form:
 where p(y) represents the postion of the least-significant set bit.
 </p>
 </section>
-<section id="slide-org2fb97d8">
-<h4 id="org2fb97d8">Bitmap</h4>
+<section id="slide-org8ffee83">
+<h4 id="org8ffee83">Bitmap</h4>
 <p>
 \[p(y)\] for each word in stream is stored in a \[bitmap[0 \ldots L-1]\]
 </p>
@@ -136,8 +136,8 @@ where p(y) represents the postion of the least-significant set bit.
 
 </ul>
 </section>
-<section id="slide-org1ce02e8">
-<h4 id="org1ce02e8">Expected Behavior</h4>
+<section id="slide-org5056ee2">
+<h4 id="org5056ee2">Expected Behavior</h4>
 <p>
 If n is the number of distinct elements in M then:
 </p>
@@ -148,31 +148,31 @@ If n is the number of distinct elements in M then:
 
 </ul>
 </section>
-<section id="slide-org99d49ea">
-<h4 id="org99d49ea">In consequence</h4>
+<section id="slide-org8e0a7aa">
+<h4 id="org8e0a7aa">In consequence</h4>
 <p>
 \[ i \gg \log_2\,n \] is expected to be zero
 \[ i \ll \log_2\,n \] is expected to be one
 \[ i \approx log_2\,n\] has a fringe of zeros and ones
 </p>
 </section>
-<section id="slide-org285fed2">
-<h4 id="org285fed2">Bias Factor</h4>
+<section id="slide-orgbc9fcc1">
+<h4 id="orgbc9fcc1">Bias Factor</h4>
 <p>
 Flajolet and Martin identified a bias factor:
 \[ \varphi = 0.77351\cdots\]
 </p>
 </section>
-<section id="slide-orgcddf576">
-<h4 id="orgcddf576">Standard Deviation</h4>
+<section id="slide-orge9eaa70">
+<h4 id="orge9eaa70">Standard Deviation</h4>
 <p>
 Flajolet and Martin prove that under reasonable probablistic assumptions:
 \[ \sigma(R) \approx 1.12\]
 Therefore, result is typically 1 binary order of magnitude off (correction via nmap)
 </p>
 </section>
-<section id="slide-orgf888c99">
-<h4 id="orgf888c99">NMAP</h4>
+<section id="slide-org6c2355f">
+<h4 id="org6c2355f">NMAP</h4>
 <p>
 Set of Hashing functions for each word
 \[  A = \frac{ R_1 + R_2 + \dots + R_m}m \]
@@ -182,14 +182,14 @@ Set of Hashing functions for each word
 </section>
 </section>
 <section>
-<section id="slide-org6d4e830">
-<h3 id="org6d4e830">PCSA</h3>
+<section id="slide-org12814c9">
+<h3 id="org12814c9">PCSA</h3>
 <p>
 Probabilistic Counting with Stochastic Averages
 </p>
 </section>
-<section id="slide-orgf6c7dc7">
-<h4 id="orgf6c7dc7">Modification to basic approach</h4>
+<section id="slide-org5fba41f">
+<h4 id="org5fba41f">Modification to basic approach</h4>
 <ul>
 <li class="fragment appear">use hashing function in order to distribute each word into one of m lots via:
 \[ \alpha = h(x)\,mod\,m\]</li>
@@ -198,8 +198,8 @@ Probabilistic Counting with Stochastic Averages
 
 </ul>
 </section>
-<section id="slide-org54dd65d">
-<h4 id="org54dd65d">Expectation</h4>
+<section id="slide-org0147740">
+<h4 id="org0147740">Expectation</h4>
 <ul>
 <li>distribution of records falls evenly into lots so that \[(1/\varphi)\,2^A\] is a reasonable approximation</li>
 
@@ -207,13 +207,13 @@ Probabilistic Counting with Stochastic Averages
 </section>
 </section>
 <section>
-<section id="slide-org709f260">
-<h3 id="org709f260">Implementation</h3>
-<div class="outline-text-3" id="text-org709f260">
+<section id="slide-org684805e">
+<h3 id="org684805e">Implementation</h3>
+<div class="outline-text-3" id="text-org684805e">
 </div>
 </section>
-<section id="slide-org6fb8aea">
-<h4 id="org6fb8aea">Hash Function</h4>
+<section id="slide-orge5471a9">
+<h4 id="orge5471a9">Hash Function</h4>
 <div class="org-src-container">
 
 <pre  class="src src-python"><code trim><span style="color: #8ac6f2; font-weight: bold;">def</span> <span style="color: #cae682;">hash_val</span><span style="color: #8c8c8c;">(</span><span style="color: #8ac6f2; font-weight: bold;">self</span>, word: <span style="color: #e5786d;">str</span>, v: <span style="color: #e5786d;">int</span>, w: <span style="color: #e5786d;">int</span><span style="color: #8c8c8c;">)</span> -&gt; <span style="color: #e5786d;">int</span>:
@@ -226,8 +226,8 @@ Probabilistic Counting with Stochastic Averages
 </div>
 
 </section>
-<section id="slide-orgc9d8bff">
-<h4 id="orgc9d8bff">Updating the bitmap</h4>
+<section id="slide-orgc4dc971">
+<h4 id="orgc4dc971">Updating the bitmap</h4>
 <div class="org-src-container">
 
 <pre  class="src src-python"><code trim><span style="color: #8ac6f2; font-weight: bold;">def</span> <span style="color: #cae682;">update_bitmap</span><span style="color: #8c8c8c;">(</span><span style="color: #8ac6f2; font-weight: bold;">self</span>, word: <span style="color: #e5786d;">str</span><span style="color: #8c8c8c;">)</span> -&gt; <span style="color: #e5786d;">None</span>:
@@ -248,8 +248,8 @@ Probabilistic Counting with Stochastic Averages
 </div>
 
 </section>
-<section id="slide-orgcdfa801">
-<h4 id="orgcdfa801">Rightmost Set Bit</h4>
+<section id="slide-org3377228">
+<h4 id="org3377228">Rightmost Set Bit</h4>
 <div class="org-src-container">
 
 <pre  class="src src-python"><code trim><span style="color: #8ac6f2; font-weight: bold;">def</span> <span style="color: #cae682;">rightmost_set_bit</span><span style="color: #8c8c8c;">(</span><span style="color: #8ac6f2; font-weight: bold;">self</span>, v: <span style="color: #e5786d;">int</span><span style="color: #8c8c8c;">)</span> -&gt; <span style="color: #e5786d;">int</span>:
@@ -262,8 +262,8 @@ Probabilistic Counting with Stochastic Averages
 </div>
 
 </section>
-<section id="slide-orga8e5f6c">
-<h4 id="orga8e5f6c">Basic Estimation Approach</h4>
+<section id="slide-orgb8c727e">
+<h4 id="orgb8c727e">Basic Estimation Approach</h4>
 <div class="org-src-container">
 
 <pre  class="src src-python"><code trim><span style="color: #8ac6f2; font-weight: bold;">def</span> <span style="color: #cae682;">fm</span><span style="color: #8c8c8c;">(</span><span style="color: #8ac6f2; font-weight: bold;">self</span><span style="color: #8c8c8c;">)</span> -&gt; <span style="color: #e5786d;">int</span>:
@@ -287,8 +287,8 @@ Probabilistic Counting with Stochastic Averages
 </div>
 
 </section>
-<section id="slide-orgf072559">
-<h4 id="orgf072559">PCSA Approach</h4>
+<section id="slide-orgff006f8">
+<h4 id="orgff006f8">PCSA Approach</h4>
 <div class="org-src-container">
 
 <pre  class="src src-python"><code trim><span style="color: #8ac6f2; font-weight: bold;">def</span> <span style="color: #cae682;">pcsa_bitmap</span><span style="color: #8c8c8c;">(</span><span style="color: #8ac6f2; font-weight: bold;">self</span>, word: <span style="color: #e5786d;">str</span><span style="color: #8c8c8c;">)</span> -&gt; <span style="color: #e5786d;">None</span>:
@@ -318,13 +318,13 @@ Probabilistic Counting with Stochastic Averages
 </section>
 </section>
 <section>
-<section id="slide-orgcaa2625">
-<h3 id="orgcaa2625">Results</h3>
-<div class="outline-text-3" id="text-orgcaa2625">
+<section id="slide-orgb425bf1">
+<h3 id="orgb425bf1">Results</h3>
+<div class="outline-text-3" id="text-orgb425bf1">
 </div>
 </section>
-<section id="slide-orga615644">
-<h4 id="orga615644">Search Terms</h4>
+<section id="slide-org99a5069">
+<h4 id="org99a5069">Search Terms</h4>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -419,34 +419,34 @@ Probabilistic Counting with Stochastic Averages
 
 
 </section>
-<section id="slide-org76f6cfb">
-<h4 id="org76f6cfb">Low Count Entries</h4>
+<section id="slide-org04e064f">
+<h4 id="org04e064f">Low Count Entries</h4>
 
-<div id="org2c1cb52" class="figure">
-<p><img src="images/distribution_small.png" alt="distribution_small.png" width="800px" />
+<div id="org86edb66" class="figure">
+<p><img src="https://552dlimages.s3-eu-west-1.amazonaws.com/distribution_small.png" alt="distribution_small.png" width="800px" />
 </p>
 </div>
 </section>
-<section id="slide-orgc7f12d9">
-<h4 id="orgc7f12d9">Medium Count Entries</h4>
+<section id="slide-org5115bf9">
+<h4 id="org5115bf9">Medium Count Entries</h4>
 
-<div id="org8d7b0da" class="figure">
-<p><img src="images/distribution_med.png" alt="distribution_med.png" width="800px" />
+<div id="org1085826" class="figure">
+<p><img src="https://552dlimages.s3-eu-west-1.amazonaws.com/distribution_med.png" alt="distribution_med.png" width="800px" />
 </p>
 </div>
 </section>
-<section id="slide-orgc71f9dc">
-<h4 id="orgc71f9dc">Large Count Entries</h4>
+<section id="slide-org330ed6e">
+<h4 id="org330ed6e">Large Count Entries</h4>
 
-<div id="org1bc0885" class="figure">
-<p><img src="images/distribution_large.png" alt="distribution_large.png" width="800px" />
+<div id="org12e7bc0" class="figure">
+<p><img src="https://552dlimages.s3-eu-west-1.amazonaws.com/distribution_large.png" alt="distribution_large.png" width="800px" />
 </p>
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgca45054">
-<h3 id="orgca45054">Discussion</h3>
+<section id="slide-orgdb906c0">
+<h3 id="orgdb906c0">Discussion</h3>
 <ul>
 <li class="fragment appear">basic estimation is consistent and provides better accuracy compared to PCSA implementation</li>
 <li class="fragment appear">PCSA has large distribution</li>
@@ -458,8 +458,8 @@ Probabilistic Counting with Stochastic Averages
 </section>
 </section>
 <section>
-<section id="slide-org3e524e4">
-<h3 id="org3e524e4">Next Steps</h3>
+<section id="slide-org7809393">
+<h3 id="org7809393">Next Steps</h3>
 <ul>
 <li>improve hashing function for PCSA approach</li>
 <li>review LogLog, SuperLogLog, HyperLogLog and review their increase in accuracy (trade-offs performance / accuracy)</li>
