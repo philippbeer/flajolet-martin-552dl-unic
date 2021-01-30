@@ -201,18 +201,6 @@ class FlajoletMartin:
             return None
         return int(math.log2(v & (~v + 1)))
 
-    def rightmost_zero(self, bitmap: np.ndarray) -> int:
-        """
-        identifies position of right most bit set to zero
-        params:
-        :b: (Numpy Array) to be searched for rightmost zero
-        returns
-        :rightmost_zero: (integer) returns rightmost zero index position
-                            counting from the right starting with index 0
-        """
-        res = np.where(bitmap == 0)[0]  # finds all zeros in bitmap
-        # return position of rightmost zero (consider last element is pos 1)
-        return res
 
     def leftmost_zero(self, bitmap: np.ndarray) -> int:
         """
@@ -220,7 +208,7 @@ class FlajoletMartin:
         params:
         :b: (Numpy Array) to be searched for rightmost zero
         returns
-        :rightmost_zero: (integer) returns rightmost zero index position
+        :leftmost_zero: (integer) returns rightmost zero index position
                             counting from the right starting with index 0
         """
         res = np.where(bitmap == 0)[0]  # finds all zeros in bitmap
@@ -343,7 +331,7 @@ if __name__ == "__main__":
                     ]
 
     procs = multiprocessing.cpu_count() - 1  # number of processes
-    rounds = 1000
+    rounds = 2
     jobs = []
     df_all = pd.DataFrame()
 
@@ -366,8 +354,6 @@ if __name__ == "__main__":
         jobs.append(p)
         p.start()
 
-    print(jobs)
-
     # checking they are done
     for j in jobs:
         j.join()
@@ -377,6 +363,5 @@ if __name__ == "__main__":
             'fm_count': ret_fm_cnt[:],
             'pcsa_count': ret_pcsa_cnt[:]}
     
-    print(data)
     df = pd.DataFrame.from_dict(data)
     df.to_csv('./fm_analysis_'+str(rounds)+'.csv', index=False)

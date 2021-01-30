@@ -1,0 +1,262 @@
+
+#+OPTIONS: toc:nil
+\begin{document}
+\lstset{breaklines=true}
+%Titelseite
+\begin{titlepage}
+	\large
+	\begin{minipage}{13cm}
+		\begin{center}
+			\LARGE{  \textbf{Data Privacy and Ethics}} \\
+			\vspace*{1cm}
+			Philipp Beer  \\
+			\vspace*{1cm}
+			Dipl. Wirtschaftsinformatiker \\
+            \vspace*{1cm}
+			\today
+			
+			\vspace{1cm}
+      Semester: winter 2020/21 \\
+			Advisor:	Thomas Liebig \\
+		\end{center}
+	\end{minipage}
+	\vfill
+	\normalsize
+	
+	\begin{minipage}[b]{8cm}
+		\raggedright
+		University of Nicosia \\
+		School of Sciences and Engineering\\
+		Department of Computer Science \\
+		\vspace{2cm}
+                \includegraphics[width=\linewidth]{images/unic_logo.png}
+	\end{minipage}
+\end{titlepage}
+\pagenumbering{arabic}
+\section{Introduction}
+The goal of this assignment is to implement the Flajolet-Martin algorithm to estimate cardinalities of multisets of words for a variety of entries in the online encyclopedia Wikipedia; specifically count the number of unique words in a Wikipedia page.
+
+\subsection{Motivation}
+Counting unique elements is one of the fundamental activities in most computer applications. In their original paper \cite{bib:fm85} mentioned computational constraints as a reason to search for alternative ways of achieving a reasonably accurate estimate of cardinalities of multisets. This is still true today, given the increasing amounts of data that are being generated. Aside from this, today additional use cases have arisen, that make the utilization of the below introduced of \emph{Flajolet-Martin algorithm} interesting.
+\newline\newline
+As will be shown the algorithm is capable of handling stream data while estimating the cardinalities of the transmitted dataset in a single pass. This can be used in areas related to data privacy as the basis for the counting procedure can be computed in a distributed manner and only an anonymous array of bits is aggregated centrally to compute the unique number of elements in a given data stream.
+
+
+\section{Resources}
+\subsection{Programming Language}
+For the implementation Python is chosen as programming language. Aside from its ubiquity it also offers a number of packages that can be utilized for the realization of this task. In particular the wikpedia package \cite{bib:goldsmith} can be used to read arbitrary wikipedia articles as it layed out in~\ref{subsec:data}. 
+
+\subsection{Data set}
+\label{subsec:data}
+The resources for which unique items (n) are to be counted are the unique words occcuring in \emph{Wikipedia} entries. Numerous options for processing this data are available that fall into these main categories:
+\begin{itemize}
+  \item Scraping the website and processing the read html pages for their content
+\item Downloading Wikipedia as a database as described in \cite{bib:wikidl}
+  \item Utilizing a package that encapsulates the aforementioned activities and provides the data to the user
+\end{itemize}
+
+Downloading \emph{Wikipedia} as database is possible but requires large storage space (\textasciitilde 11GB) and for the most part would not be used. The second option is also a larger challenge as it requires signficant preprocessing steps before the actual activities in the assignment can be carried out. Therefore the third option of a package that provides the page content as a data object appears to be the most straight forward approach. Additional pre-processing steps were applied to the page content. The stream elements were:
+\begin{itemize}
+\item modified to lowercase only
+\item  non-word characters were exchanged with whitespace character
+\item all digits were exchanged with whitespace character
+\item multi-whitespace characters replaced with a single whitespace
+\end{itemize}
+To get an accurate word count the above steps appear to be sensible to avoid words that can be considered unique and may only be different because of that fact that they appear at the beginning of a sentence or not. Digits in this work are not considered words and hence removed. Removing the whitespace characters ensures a clean dataset so that situations where elements are exchanged with whitespace are not counted multiple times.
+
+In order to have access to arbitrary Wikipedia entries a readily available python package \emph{wikipedia} is utilized and implemented as class that reads and digests \emph{Wikipedia} pages based on the search term provided by the class user.
+
+
+\section{General Solution Approach}
+\subsection{Data Ingestion}
+In order to get be able to count the number of unique words in a \emph{Wikipedia} entry the \emph{WikiText} class is instanciated and provided a search term for which an entry is queried by the wikipedia-Python package and if found returns an object with the respective page content. In case a search term is provided that can not found or retrieved a \emph{PageError} is returned to the use.
+
+Subsequently, the pre-processing activities are carried out and the data object is ready for analysis.
+
+\subsection{Algorithm Execution}
+After the data from the \emph{Wikipedia} page has been ingested and pre-processed a second class (\emph{FlajoletMartin}) is utilized on order to execute the counting of the number of the unique words within that article. The data stream is transferred from the wikipedia page content provided to the newly created object.
+
+The code of these classes can be seen in~ref{sec:class}
+
+\subsection{Verification}
+In order to validate the veracity of the Flajolet-Martin algorithm implementation a second method for counting the unique number of words is implemented inside the \emph{WikiText} class. It is based on the "classical" approach of creating a  set after the page content has been pre-processed and reading the length of the remaining set. Hence, this approach relies soly on Python "on-board" functionality and is used for the verification of the Flajolet-Martin implementation.
+
+
+\section{Flajolet-Martin Algorithm}
+\subsection{Introduction}
+The \emph{Flajolet-Martin algorithm} builds on probabilities encountered in the use of hashing functions can provide reasonably accurate estimates of cardinalities in large datasets. It is built on the assumption that the records to be estimated can be hashed in a fitting pseudo-random manner.
+
+\subsection{Basic Estimation Approach}
+\label{subsec:basicappr}
+The paper by Flajolet and Martin lays out the following required elements for the estimation process:
+- A single word is denoted as
+\begin{definition}
+  x = (x_0, x_1, \dots, x_p)
+\end{definition}
+is hashed via
+\begin{equation}
+\label{eq:hash}
+  \emph{hash function}(x) = (M + N \sum\limits_{j = 0}^p ord(x_j) 128^j)\: mod \: 2^L
+\end{equation}
+which transforms words into integers (y) with a uniform distribution. These integers are considered in the bit form via:
+\begin{equation}
+  y = \sum_{k \ge 0} bit(y, k)2^k.
+  \end{equation}
+- The counting mechanism relies on
+\begin{definition}
+p(y)
+\end{defintion}
+which represents the position of the least significant 1-bit in the binary representation of y.
+The results are ranked starting from zero.
+The length of the bitmap vector is set as:
+\begin{equation}
+  \L > log_2(n/nmap) + 4.
+\end{equation}
+It is expected that for the value at bitmap[0] is set in n/2 times, bitmap[1] approximately n/4 times \dots. Therefore, the bit in the bitmap at position i is almost certainly zero if \begin{definition} i \gg \log_2 n \end{definition} and \emph{1} if \begin{definition} i \ll \log_2 n \end{definition}.
+The nmap value determines the number of bitmaps calculated for each word which are combined via a bitwise 'OR' statement to treat the standard deviation of R, which is leftmost zero position in the bitmap and usually has
+\begin{definition}
+  \sigma(R) \approx 1.12
+\end{definition}
+This dispersion results in an error roughly 1 binary order of magnitude.
+
+\subsection{Results using the basic estimation approach}
+With the implementation of the basic algorithm described in~\ref{subsec:basicappr} and the utilization of the correction method of averaging multiple bitmaps yielded fluctuating results.
+The results still flucuated roughly one binary order of magnitude around the correct results despite the use of  nmap = 64.
+
+\subsection{Probabilistic Counting with Stochastic Averaging}
+In their paper \cite{bib:fm85} Flajolet and Martin point out an additional approach \emph{Probabilistics Counting with Stochastic Averaging} (PCSA) to improve the performance of the algorithmic result. In this modification the hashing function
+\begin{definition}
+  \alpha = h(x)\: mod\: m
+\end{definition}
+is utilized to determine which of the nmap bitmaps is updated. The corresponding information is stored at
+\begin{definition}
+  h(x) div m \equiv \lfloor h(x)/m \rfloor
+\end{definition}. In the final step the average between the different bitmaps is calculated using
+\begin{equation}
+  A = \frac{ R^{<1>} + R^{<2>} + \dots + R^{<m>}}m.
+\end{equation}
+Under the assumption that the distribution of the hashed words into the different lots is even, it can be expected that n/m elements fall into each lot so that
+\begin{definition}
+(1/\varphi)2^A
+\end{definition}
+can be a reasonable approximation of n/m. Flajolet and Martin define \varphi = 0.77351\cdots.
+
+\section{Validation}
+\subsection{Basic Setup}
+\label{subsec:bassetup}
+To validate the different aspects of the \emph{Flajolet-Martin} algorithm, 3 categories of \emph{Wikpedia} entries were defined according to the length of their unique words:
+\begin{center}
+ \begin{tabular}{||c c||} 
+ \hline
+ Name & Range \\ [0.5ex] 
+ \hline\hline
+ Small & 0 - 1049 \\ 
+ \hline
+ Medium & 1050 - 2549 \\
+ \hline
+ Large & n > 2550 \\
+ \hline
+\end{tabular}
+\end{center}
+With this setup it is validated how the performance of the basic \emph{Flajolet-Martin} approach compared to the \emph{PCSA} approach differs among different ranges of n.
+
+\subsection{Wikipedia Entries}
+The search queries chosen are a random list of \emph{Wikipedia} entries that fall into in~\ref{subsec:bassetup} mentioned categories. The list is as follows:
+To validate the different aspects of the \emph{Flajolet-Martin} algorithm, 3 categories of \emph{Wikpedia} were defined:
+\begin{center}
+ \begin{tabular}{||c c||} 
+ \hline
+ Search Term & True Unique Values \\ [0.5ex] 
+ \hline\hline
+ List of fatal dog attacks in the United States (2010s) & 54  \\ 
+ \hline
+ Weisswurst & 265 \\
+ \hline
+ university of nicosia & 1035 \\
+ \hline
+data privacy & 1049 \\ 
+ \hline
+ Timeline of the Israeli–Palestinian conflict 2015 & 1406 \\
+ \hline
+covid & 1657 \\
+ \hline
+List of Crusades to Europe and the Holy Land & 2464 \\ 
+ \hline
+ michael jordan & 2529 \\
+ \hline
+ List of University of Pennsylvania people & 2928 \\
+ \hline
+Donald Trump & 4633 \\ 
+ \hline
+2020 Nagorno-Karabakh war & 4643 \\
+ \hline
+List of association football families & 5883 \\
+ \hline   
+ \end{tabular}
+ \end{center}
+
+\subsection{Results}
+For each search term the two estimation algorithms were run 1.000 teams each to retrieve a sufficient sample to analyze the behavior of each estimation method.
+ \begin{center}
+\begin{minipage}{1\linewidth}
+\includegraphics[width=\linewidth]{images/distribution_small.png}
+\captionof{figure}{Low Count - Distribution of Estimations}
+\end{minipage}%
+\hfill
+\newpage
+\begin{minipage}{1\linewidth}
+\includegraphics[width=\linewidth]{images/distribution_med.png}
+\captionof{figure}{Medium Count - Distribuion of Estimations}
+\end{minipage}
+\hfill
+\newpage
+\begin{minipage}{1\linewidth}
+\includegraphics[width=\linewidth]{images/distribution_large.png}
+\captionof{figure}{Medium Count - Distribuion of Estimations}
+\end{minipage}
+\end{center}
+
+\subsection{Discussion}
+Several interesting observations can be made:
+\begin{itemize}
+\item The basic estimation method is much more stable in its behavior compared to the \emph{PCSA} implementation. The results are very consistent and in most cases do not deviate in their results over the 1.000 executions. The only variable factor during those executions are the chosen factors for the hash function ~\ref{eq:hash}.
+\item The \emph{PCSA} has a large distribution and tends to overestimate results in some individual cases very significantly.
+\item The \emph{PCSA} method performed worst within the low count category of the Wikipedia entries. In the worst case the algorithm was off by factor of 51.
+\item As the number of unique entries increases the performance of the \emph{PCSA} method improves but still lags the basic estimation method. Only in the case of the query with the largest unique entries in the sample set (List of assocation football families) the \emph{PCSA} outperforms the basic estimation method in terms of accuracy.
+\item In the area of performance the \emph{PCSA} approach is significantly more performant compared to the basic estimation method as it executes the has function per entry only 1 compared to nmap times for the basic estimation approach.
+\item Running the entire test scenario with 12 search terms, nmap = 64 and 1.000 executions per search term took roughly 180 minutes on a 4-core system with Hyper-Threading active and a very naive multi-threading implementation.
+\end{itemize}
+
+
+This implementation of the basic \emph{Flajolet-Martin} algorithm achieves mediocre results that are generally ok but in some instances (e.g. search terms covid, university of nicosia, data privacy) show to much deviation for most real-world applications. The \emph{PCSA} implementation performs significantly worse compared to the basic estimation. In general its performance improves as the number of unique items in the stream increases. In the range of 4500 unique items it starts to enter the range predicted by Flajolet and Martin in ~/cite{fm85}. It is assumed that the result of this is so poor, due to an improper choice for the hashing function.
+
+The area of improvement appears to be a better choice of the hash function for the \emph{PCSA} method which does not produce reasonable results in its current state.
+
+\section{Summary}
+In this paper we have focused on implementing the Flajolet-Martin algorithm in two flavors, to estimate the unique in elements in a stream. In our case, unique words from \emph{Wikipedia} entries.
+\newline\newline
+The algorithm was implemented in Python and tested on 12 different search terms of varying true unique values with 1000 executions per method. The basic estimation method performed more accurately but also required significantly more compute time for a reasonable accuracy. The \emph{PCSA} method offered much better compute performance but in its current implementation does not provide the accuracy (deviation of up to a factor of 51) described by Flajolet-Martin. 
+\newline\newline
+In the future, we will modify the hash function for the \emph{PCSA} method to achieve better estimation results.
+
+\subsection{Flajolet-Martin and Wikipedia Processing }
+The implementation of both classes as well as the test run described above is as follows:
+\lstinputlisting[language=Python, caption=\emph{Flajolet-Martin} Implementation]{final_assignment.py}
+
+
+\subsection{Visualization Code}
+The visualization were done with slight variation of the following code:
+\lstinputlisting[language=Python, caption=Visualization Code]{fm_analytics.py}
+
+
+\newpage
+\begin{thebibliography}{widest entry}
+\bibitem[FM85]{bib:fm85} Flajolet M. and Martin G. N., ``Probabalistic Counting for Data Base Applications'', \emph{Journal of Compyter and System Sciences}, 1985
+\bibitem[PPMM]{bib:ppmm} Kamp, Michael, et. al., ``Privacy-Preserving Mobility Monitoring using Sketches of Stationary Sensor Readings'', 2013
+\bibitem[Py_Wiki]{bib:goldsmith} Goldsmith, J. ``Wikipedia'', \url{https://github.com/goldsmith/Wikipedia}
+\bibitem[WikiDB] {bib:wikidl} Wikimedia Downloads \emph{https://dumps.wikimedia.org}, Wikimedia! The Wikimedia Foundation, Inc., 2021
+\end{thebibliography}
+
+\end{document}
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+
